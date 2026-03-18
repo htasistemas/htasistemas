@@ -1,0 +1,98 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=${DB_USERNAME:-g3}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-admin}
+      - POSTGRES_DB=${DB_NAME:-g3}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - g3_net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST:-db}:${DB_PORT:-5432}/${DB_NAME:-g3}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME:-g3}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-admin}
+    ports:
+      - "8080:8080"
+    volumes:
+      - backend_storage:/app/storage
+    depends_on:
+      db:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    networks:
+      - g3_net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    environment:
+      - API_BASE_URL=${API_BASE_URL:-}
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /usr/share/nginx/html/index.html && wget -qO- http://localhost/ > /dev/null || exit 1"]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+      start_period: 30s
+    networks:
+      - g3_net
+
+  hta-site:
+    build:
+      context: ../hta-site
+      dockerfile: Dockerfile
+    container_name: hta-site
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ > /dev/null || exit 1"]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+      start_period: 20s
+    networks:
+      - g3_net
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    entrypoint: ["cloudflared", "tunnel", "--config", "/etc/cloudflared/config.yml", "run"]
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    volumes:
+      - ./docker/cloudflared:/etc/cloudflared:ro
+    restart: always
+    networks:
+      - g3_net
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+      hta-site:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  backend_storage:
+
+networks:
+  g3_net:
+    driver: bridge

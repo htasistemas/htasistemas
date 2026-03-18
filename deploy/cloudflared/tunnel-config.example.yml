@@ -1,0 +1,10 @@
+ingress:
+  - hostname: htasistemas.com.br
+    service: http://hta-site:80
+  - hostname: www.htasistemas.com.br
+    service: http://hta-site:80
+  - hostname: g3.htasistemas.com.br
+    service: http://frontend:80
+  - hostname: apig3.htasistemas.com.br
+    service: http://backend:8080
+  - service: http_status:404

@@ -1,0 +1,13 @@
+services:
+  hta-site:
+    image: hta-site:latest
+    container_name: hta-site
+    restart: always
+    networks:
+      - g3_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ > /dev/null || exit 1"]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+      start_period: 20s
