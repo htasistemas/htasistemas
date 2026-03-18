@@ -1,16 +1,45 @@
-## Hi there 👋
+# 🚀 HTA Sistemas
 
-<!--
-**htasistemas/htasistemas** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Bem-vindo à **HTA Sistemas**
 
-Here are some ideas to get you started:
+Somos especializados no desenvolvimento de soluções inteligentes para gestão pública comércio e terceiro setor.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+---
+
+## 💡 Nossos Sistemas
+
+### 🔹 G3N - Gestão do Terceiro Setor
+Sistema completo para:
+- Gestão de beneficiários
+- Controle de atendimentos
+- Prestação de contas
+- Doações e voluntariado
+
+---
+
+### 🔹 Finance Pro Master
+Controle financeiro moderno e inteligente.
+
+---
+
+## 🌐 Site Oficial
+Em breve: https://htasistemas.com.br
+
+---
+
+## 📞 Contato
+- WhatsApp: (colocar aqui)
+- Email: (colocar aqui)
+
+---
+
+## 🚀 Tecnologias
+- React
+- Node.js
+- PostgreSQL
+- Tailwind CSS
+
+---
+
+## 📈 Missão
+Transformar a gestão de instituições através da tecnologia.
